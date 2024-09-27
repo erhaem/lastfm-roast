@@ -1,0 +1,15 @@
+@use '@picocss/pico/scss/pico' with (
+  $semantic-root-element: 'div#pico-root'
+);
+
+.center-footer {
+  text-align: center;
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

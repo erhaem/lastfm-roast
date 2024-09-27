@@ -1,0 +1,1 @@
+export const PROMPT_TEMPLATE = `Give comprehensive roast to my Last.fm profile in extremely harsh way, in {{language}}. Don't give any advice or praise. No text formatting. Make it extremely savage. Here's the JSON data of the user: {{jsonData}}`;
