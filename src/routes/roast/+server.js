@@ -1,3 +1,9 @@
+import { PROD_APP_URL } from '$env/static/private';
+import { dev } from '$app/environment';
+
+import { PROMPT_TEMPLATE } from '$lib/data/prompt.js';
+import { AVAILABLE_LANGUAGES } from '$lib/data/languages.js';
+
 import {
   userExists,
   getRecentTracks,
@@ -8,16 +14,9 @@ import {
 } from '$lib/lastfm.js';
 import { generateContent } from '$lib/gemini.js';
 
-import { PROMPT_TEMPLATE } from '$lib/data/prompt.js';
-import { AVAILABLE_LANGUAGES } from '$lib/data/languages.js';
-
 import { error, json } from '@sveltejs/kit';
 
-export async function GET() {
-  error(400, { error: 'No GET request allowed!' });
-}
-
-export async function POST({ request }) {
+export async function POST({ request, setHeaders }) {
   const { username, selectedLanguage } = await request.json();
 
   if (!username) {
@@ -66,6 +65,12 @@ export async function POST({ request }) {
   console.time('Gemini req');
   const roast = await generateContent(prompt);
   console.timeEnd('Gemini req');
+
+  setHeaders({
+    'Access-Control-Allow-Origin': dev ? '*' : PROD_APP_URL,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  });
 
   return json({ roast }, { status: 200 });
 }
