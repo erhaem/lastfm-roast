@@ -1,4 +1,3 @@
-<!-- TODO: pilihan bahasa -->
 <script>
   import { AVAILABLE_LANGUAGES } from '$lib/data/languages.js';
 
