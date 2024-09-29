@@ -1,8 +1,6 @@
-import { PROD_APP_URL } from '$env/static/private';
-import { dev } from '$app/environment';
-
 import { PROMPT_TEMPLATE } from '$lib/data/prompt.js';
 import { AVAILABLE_LANGUAGES } from '$lib/data/languages.js';
+import { CORS_WHITELIST } from '$lib/data/cors_whitelist.js';
 
 import {
   userExists,
@@ -35,7 +33,6 @@ export async function POST({ request, setHeaders }) {
     error(404, { error: 'User not found' });
   }
 
-  //so damn slow
   console.time('Lastfm API reqs');
   const [recentTracks, topTracks, topArtists, topAlbums, lovedTracks] =
     await Promise.all([
@@ -55,7 +52,6 @@ export async function POST({ request, setHeaders }) {
     ...topAlbums,
     ...lovedTracks,
   });
-  // console.log(data);
 
   const prompt = PROMPT_TEMPLATE.replace(
     '{{language}}',
@@ -66,8 +62,13 @@ export async function POST({ request, setHeaders }) {
   const roast = await generateContent(prompt);
   console.timeEnd('Gemini req');
 
+  const origin = request.headers.get('Origin');
+  if (!CORS_WHITELIST.includes(origin)) {
+    error(403, { error: 'Not allowed' });
+  }
+
   setHeaders({
-    'Access-Control-Allow-Origin': dev ? '*' : PROD_APP_URL,
+    'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   });
