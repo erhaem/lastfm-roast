@@ -1,7 +1,7 @@
-import { CACHE_DURATION } from '$env/static/private';
+import { CACHE_DURATION_IN_MS } from '$env/static/private';
 
-const FIVE_MINS = 5 * 60 * 1000; //5 mins in ms
-const cacheDuration = CACHE_DURATION ?? FIVE_MINS;
+const FIVE_MINS = 300000; //5 mins in ms
+const cacheDuration = CACHE_DURATION_IN_MS ?? FIVE_MINS;
 
 const cache = new Map();
 
