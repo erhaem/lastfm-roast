@@ -38,6 +38,10 @@ async function generateContent(prompt, attempt = 0, apiKeyIndex = 0) {
     safetySettings: DEFAULT_SAFETY_SETTINGS,
   });
 
+  console.log(
+    `[generateContent] number of api keys: ${maxAttempts}, current api key index: ${apiKeyIndex}`
+  );
+
   try {
     const { response } = await modelInstance.generateContent(prompt);
     return response.text();
