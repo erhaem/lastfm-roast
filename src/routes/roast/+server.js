@@ -48,9 +48,9 @@ export async function POST({ request, setHeaders }) {
   }
 
   const cached = getCache(username);
-  if (cached) {
+  if (cached && cached?.selectedLanguage === selectedLanguage) {
     console.log(`Using cached result of ${username}..`);
-    return json({ roast: cached }, { status: 200 });
+    return json({ roast: cached?.roast }, { status: 200 });
   }
 
   const dataLimit = LASTFM_DATA_LIMIT ?? 50;
@@ -84,7 +84,7 @@ export async function POST({ request, setHeaders }) {
   const roast = await generateContent(prompt);
   console.timeEnd('Gemini req');
 
-  setCache(username, roast);
+  setCache(username, { roast, selectedLanguage });
 
   return json({ roast }, { status: 200 });
 }
