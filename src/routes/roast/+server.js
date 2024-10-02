@@ -16,6 +16,17 @@ import { setCache, getCache } from '$lib/cache.js';
 import { error, json } from '@sveltejs/kit';
 
 export async function POST({ request, setHeaders }) {
+  const origin = request.headers.get('Origin');
+  if (!CORS_WHITELIST.includes(origin)) {
+    error(403, { error: 'Not allowed' });
+  }
+
+  setHeaders({
+    'Access-Control-Allow-Origin': origin,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+  });
+
   const { username, selectedLanguage } = await request.json();
 
   if (!username) {
@@ -70,17 +81,6 @@ export async function POST({ request, setHeaders }) {
   console.timeEnd('Gemini req');
 
   setCache(username, roast);
-
-  const origin = request.headers.get('Origin');
-  if (!CORS_WHITELIST.includes(origin)) {
-    error(403, { error: 'Not allowed' });
-  }
-
-  setHeaders({
-    'Access-Control-Allow-Origin': origin,
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-  });
 
   return json({ roast }, { status: 200 });
 }
