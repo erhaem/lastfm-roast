@@ -1,3 +1,5 @@
+import { LASTFM_DATA_LIMIT } from '$env/static/private';
+
 import { PROMPT_TEMPLATE } from '$lib/data/prompt.js';
 import { AVAILABLE_LANGUAGES } from '$lib/data/languages.js';
 import { CORS_WHITELIST } from '$lib/data/cors_whitelist.js';
@@ -51,14 +53,16 @@ export async function POST({ request, setHeaders }) {
     return json({ roast: cached }, { status: 200 });
   }
 
+  const dataLimit = LASTFM_DATA_LIMIT ?? 50;
+
   console.time('Lastfm API reqs');
   const [recentTracks, topTracks, topArtists, topAlbums, lovedTracks] =
     await Promise.all([
-      getRecentTracks(username),
-      getTopTracks(username),
-      getTopArtists(username),
-      getTopAlbums(username),
-      getLovedTracks(username),
+      getRecentTracks(username, dataLimit),
+      getTopTracks(username, dataLimit),
+      getTopArtists(username, dataLimit),
+      getTopAlbums(username, dataLimit),
+      getLovedTracks(username, dataLimit),
     ]);
   console.timeEnd('Lastfm API reqs');
 
