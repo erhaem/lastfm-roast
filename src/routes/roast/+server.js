@@ -11,6 +11,7 @@ import {
   getLovedTracks,
 } from '$lib/lastfm.js';
 import { generateContent } from '$lib/gemini.js';
+import { setCache, getCache } from '$lib/cache.js';
 
 import { error, json } from '@sveltejs/kit';
 
@@ -31,6 +32,12 @@ export async function POST({ request, setHeaders }) {
 
   if (!(await userExists(username))) {
     error(404, { error: 'User not found' });
+  }
+
+  const cached = getCache(username);
+  if (cached) {
+    console.log(`Using cached result of ${username}..`);
+    return json({ roast: cached }, { status: 200 });
   }
 
   console.time('Lastfm API reqs');
@@ -61,6 +68,8 @@ export async function POST({ request, setHeaders }) {
   console.time('Gemini req');
   const roast = await generateContent(prompt);
   console.timeEnd('Gemini req');
+
+  setCache(username, roast);
 
   const origin = request.headers.get('Origin');
   if (!CORS_WHITELIST.includes(origin)) {
