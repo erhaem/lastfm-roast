@@ -47,8 +47,8 @@ export async function POST({ request, setHeaders }) {
     error(404, { error: 'User not found' });
   }
 
-  const cached = getCache(username);
-  if (cached && cached?.selectedLanguage === selectedLanguage) {
+  const cached = getCache(`${username}_${selectedLanguage}`);
+  if (cached) {
     console.log(`Using cached result of ${username}..`);
     return json({ roast: cached?.roast }, { status: 200 });
   }
@@ -84,7 +84,7 @@ export async function POST({ request, setHeaders }) {
   const roast = await generateContent(prompt);
   console.timeEnd('Gemini req');
 
-  setCache(username, { roast, selectedLanguage });
+  setCache(`${username}_${selectedLanguage}`, { roast, selectedLanguage });
 
   return json({ roast }, { status: 200 });
 }
