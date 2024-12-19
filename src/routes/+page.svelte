@@ -38,6 +38,7 @@
 </script>
 
 <svelte:head>
+  <meta name="description" content="Roast your Last.fm, judge your music taste.">
   <title>Last.fm Roast</title>
 </svelte:head>
 
