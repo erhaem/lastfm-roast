@@ -12,11 +12,15 @@ I deployed this on Cloudflare Pages as it's free. Here are the steps:
    
 ```
 # format: [Variable name]=[value]
+
+# get lastfm api key: https://www.last.fm/api/account/create
 LASTFM_API_KEY=xxxx
 # maximum number of results to obtain from Last.fm API
 LASTFM_DATA_LIMIT=50
 
+# get gemini api key: https://aistudio.google.com/app/api-keys
 # separate your api keys with commas (,) - no whitespace!
+# multiple api keys is meant to prevent limitation of each keys
 GEMINI_API_KEYS=xxx,xxx,xxx
 GEMINI_MODEL=gemini-2.0-flash-001
 
