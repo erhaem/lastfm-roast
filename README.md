@@ -1,38 +1,31 @@
-# create-svelte
+# lastfm-roast
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+Lastfm Roast is Built with Sveltekit.
 
-## Creating a project
+## Setup
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+I deployed this on Cloudflare Pages as it's free. Here are the steps:
+1. Create fork of this repo and make some modifications if you want to
+2. Go to [Cloudflare Dashboard](https://dash.cloudflare.com) -> Compute (Workers) -> Workers & Pages -> Create application
+3. Select 'Pages' -> Import an existing Git repository -> Select the forked repo
+4. Add this following variables to 'Environment variables (advanced)'
+   
 ```
+# format: [Variable name]=[value]
+LASTFM_API_KEY=xxxx
+# maximum number of results to obtain from Last.fm API
+LASTFM_DATA_LIMIT=50
 
-## Developing
+# separate your api keys with commas (,) - no whitespace!
+GEMINI_API_KEYS=xxx,xxx,xxx
+GEMINI_MODEL=gemini-2.0-flash-001
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+# cache duration in milliseconds
+CACHE_DURATION_IN_MS=300000 # 5 mins
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+DEBUG_MODE=true
 ```
+5. Save and deploy!
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## License
+[MIT](LICENSE)
